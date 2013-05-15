@@ -48,20 +48,24 @@
 				var attachEditEvent = function(layer) {
 					layer.on("click",function(e){
 						if(currentEdit){
-							currentEdit.editing.disable();
+							if(currentEdit.editing){
+								currentEdit.editing.disable();
+							}
 						}
 						currentEdit = e.target;
-						e.target.editing.enable();
+						if(e.target.editing){
+							e.target.editing.enable();
+						}
 					});
 					
 					layer.on("edit", function(e){
-						e.target.relatedObject.set("geometry",e.target.toGeoJSON());
+							e.target.relatedObject.set("geometry",e.target.toGeoJSON());
 					});
 				};
 
 				var attachDeleteEvent = function(layer) {
 					layer.on("dblclick",function(e){
-						if(currentEdit){
+						if(currentEdit.editing){
 							currentEdit.editing.disable();
 						}
 						var shape = layer.relatedObject;
@@ -109,12 +113,15 @@
 				
 				map.on('click', function (e) {	
 					if (currentEdit){
-						currentEdit.editing.disable();
+						if (currentEdit.editing){
+							currentEdit.editing.disable();
+						}
 						shapes.each(function(shape){
 							if(shape.hasChanged()){
 								shape.save();
 							}
 						});	
+						
 					}					
 				});
 			
