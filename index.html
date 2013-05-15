@@ -76,7 +76,9 @@
 				});
 				
 				map.addLayer(globalLayer);
-				map.fitBounds(globalLayer.getBounds());
+				if (shapes.length){
+					map.fitBounds(globalLayer.getBounds());
+				}
 
 				// Initialize the draw control and pass it the FeatureGroup of editable layers
 				var drawControl = new L.Control.Draw({
