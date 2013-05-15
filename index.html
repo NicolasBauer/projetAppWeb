@@ -16,6 +16,7 @@
 	
 	<div id="map" style="height:680px"></div>
 		   <script>
+		   var test;
 			var map = L.map('map').setView([35.71084, -100.21729], 5);
 			
 			L.tileLayer('http://{s}.tile.cloudmade.com/d4fc77ea4a63471cab2423e66626cbb6/997/256/{z}/{x}/{y}.png', {
@@ -52,6 +53,10 @@
 						currentEdit = e.target;
 						e.target.editing.enable();
 					});
+					
+					layer.on("edit", function(e){
+						e.target.relatedObject.set("geometry",e.target.toGeoJSON());
+					});
 				};
 
 				var attachDeleteEvent = function(layer) {
@@ -69,7 +74,7 @@
 
 				var globalLayer = L.geoJson(shapes.toJSON(),{
 					onEachFeature: function(feature, layer) {
-						layer.relatedObject = new Shape(feature);
+						layer.relatedObject = shapes.get(feature._id);		
 						attachEditEvent(layer);
 						attachDeleteEvent(layer);
 					}
@@ -101,6 +106,20 @@
 					attachEditEvent(e.layer);
 					attachDeleteEvent(e.layer);
 				});
+				
+				map.on('click', function (e) {	
+					if (currentEdit){
+						currentEdit.editing.disable();
+						shapes.each(function(shape){
+							if(shape.hasChanged()){
+								shape.save();
+							}
+						});	
+					}					
+				});
+			
+				
+				
 			
 			};
 			
