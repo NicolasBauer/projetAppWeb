@@ -4,7 +4,8 @@ var mongoose = require("mongoose");
 
 // "Model"
 
-mongoose.connect("mongodb://localhost/ensg-web-project");
+//mongoose.connect("mongodb://localhost/ensg-web-project");
+mongoose.connect("mongodb://test:test@dharma/mongohq.com:10070/test-ensg");
 
 var Schema = mongoose.Schema;
 
@@ -83,4 +84,4 @@ app.delete("/shapes/:id", function (req, res) {
     });
 });
 
-app.listen(3000);
+app.listen(process.env.PORT || 3000);
